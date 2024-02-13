@@ -21,7 +21,8 @@ BrimLoft is a dynamic web application designed for hat enthusiasts. It offers us
 - Login/Signup. User Authentication is with session and certain routes are protected with middleware (eg. detailed product views and purchasing available only to logged in users
 - Password Hashing with Bcrypt
 - Routes that will allow viewing of product galleries by category and detailed views of products which can be added to cart
-- Shopping Cart and Order creation at Checkout 
+- Shopping Cart and Order creation at Checkout
+- Responsive design with Bootstrap 
 
 ## Technologies Used
 
