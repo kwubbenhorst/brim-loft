@@ -71,7 +71,7 @@ function renderOrderSummary(orderData) {
       <div class="d-flex w-100 justify-content-between">
         <img src="${orderItem.product.image1_url}" alt="${orderItem.product.name}" class="order-item-image product-image" style="max-height: 60px; max-width: 40px;">
         <h5 class="mb-1">${orderItem.product.name}</h5>
-        <p class="mb-1">Price: $${orderItem.orderItem.price_at_purchase}</p>
+        <p class="mb-1">Price: $${orderItem.orderItem.price_at_purchase.toFixed(2)}</p>
         <select class="custom-select quantity-dropdown" data-orderitemid="${orderItem.orderItem.id}">
           ${generateQuantityOptions(orderItem.quantity)}
         </select>
@@ -103,7 +103,7 @@ function renderOrderSummary(orderData) {
 function generateQuantityOptions(selectedQuantity) {
   let options = '';
 
-  for (let i = 0; i <= 9; i++) {
+  for (let i = 1; i <= 9; i++) {
     options += `<option value="${i}" ${selectedQuantity === i ? 'selected' : ''}>${i}</option>`;
   }
 
