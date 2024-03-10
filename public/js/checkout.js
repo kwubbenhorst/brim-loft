@@ -55,7 +55,7 @@ function renderOrderSummary(orderData) {
   console.log('Order Items:', orderItems);
 
   // Select the list group container in the DOM
-  const listGroupContainer = document.querySelector('.list-group');
+  const listGroupContainer = document.querySelector('.order-item-group');
 
   // Clear existing content in the list group container
   listGroupContainer.innerHTML = '';
@@ -111,11 +111,11 @@ function generateQuantityOptions(selectedQuantity) {
 }
 
 // Helper function to render Subtotal, Shipping, Taxes, and Total
-function renderOrderTotalElements(itemTally, shippingCost, taxes, orderTotal) {
+function renderOrderTotalElements(subtotal, shippingCost, taxes, orderTotal) {
   // Replace 'elementId' with the actual IDs of the elements in your HTML
   document.getElementById('subtotal').innerText = `$${subtotal.toFixed(2)}`;
   document.getElementById('shippingCost').innerText = `$${shippingCost.toFixed(2)}`;
-  document.getElementById('orderItemsTaxes').innerText = `$${taxes.toFixed(2)}`;
+  document.getElementById('orderItemTaxes').innerText = `$${taxes.toFixed(2)}`;
   document.getElementById('orderTotal').innerText = `$${orderTotal.toFixed(2)}`;
 }
 
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
   listGroupContainer.addEventListener('change', async function (event) {
     if (event.target.classList.contains('quantity-dropdown')) {
       // Call the function to update totals and handle deletions
-      await updateTotalAndHandleDeletions(event.target);
+      await updateTotal(event.target);
     }
   });
 });
@@ -140,11 +140,11 @@ async function updateTotal() {
 
     // Render the updated totals
     renderOrderTotalElements(subtotal, shippingCost, taxes, orderTotal);
-    console.log('Updated Order Items:', updatedOrderItems);
 
     // Update quantities and handle deletions
     const quantityDropdowns = document.querySelectorAll('.quantity-dropdown');
     const updatedOrderItems = [];
+    console.log('Updated Order Items:', updatedOrderItems);
 
     for (const dropdown of quantityDropdowns) {
       const orderItemId = dropdown.getAttribute('data-orderitemid');
@@ -162,9 +162,14 @@ async function updateTotal() {
         }
       } else {
         // Update the quantity for the order item
+        console.log('orderItems:', orderItems);
         const updatedItem = orderItems.find((item) => item.orderItem.id === orderItemId);
+        console.log('orderItemId:', orderItemId);
+        console.log('updatedItem:', updatedItem);
+        if (updatedItem) {
         updatedItem.quantity = selectedQuantity;
         updatedOrderItems.push(updatedItem);
+      }
 
         // Make a PUT request to update the order item quantity on the server
         try {

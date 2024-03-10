@@ -1,4 +1,4 @@
-<body>
+
   <br>
   <div class="container checkout page">
     <div class="row">
@@ -138,6 +138,7 @@
         <h3>Order Summary</h3>
         <!-- List Group for Order Items -->
         <div class="list-group">
+          <div class="order-item-group">
           {{#each orderItems}}
             <div class="list-group-item">
               <div class="d-flex w-100 justify-content-between">
@@ -152,7 +153,9 @@
               </div>
             </div>
           {{/each}}
+          </div>
           <!-- Subtotal, Shipping, Taxes -->
+          <div class="subtotal-shipping-taxes-section">
           <div class="list-group-item">
             <div class="d-flex w-100 justify-content-between">
               <p class="mb-1">Subtotal:</p>
@@ -183,7 +186,8 @@
             <button class="btn btn-primary" onclick="confirmOrder()">Confirm Order</button>
           </div>
         </div>
+        </div>
       </div>
     </div>
-  </div>
+    <script src="/js/checkout.js"></script>
  
