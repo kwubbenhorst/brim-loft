@@ -14,7 +14,7 @@
         <h3>Shipping Information</h3>
 
         <!-- First Name and Last Name Inputs -->
-        <div class="form-row" id="name-row">
+        <div class="form-row row" id="name-row">
           <div class="form-group col-md-5">
             <label for="firstName">First Name</label>
             <input type="text" class="form-control" id="firstName" placeholder="First Name">
@@ -41,7 +41,7 @@
         </div>
 
         <!-- City and Country Inputs -->
-        <div class="form-row">
+        <div class="form-row row">
           <div class="form-group col-md-5">
             <label for="city">City</label>
             <input type="text" class="form-control" id="city" placeholder="City">
@@ -56,7 +56,7 @@
         </div>
 
         <!-- Province/State and Postal Code Inputs -->
-        <div class="form-row">
+        <div class="form-row row">
           <div class="form-group col-md-5">
             <label for="province">Province/State</label>
             <select class="form-control" id="province">
@@ -77,11 +77,11 @@
         <div class="card">
           <div class="card-body">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="shippingWithinCanada" checked>
+              <input class="form-check-input" type="radio" name="shipping-method" id="shippingWithinCanada" checked>
               <label class="form-check-label" for="shippingWithinCanada">Shipping within Canada $9.99</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="globalExpressShipping">
+              <input class="form-check-input" type="radio" name="shipping-method" id="globalExpressShipping">
               <label class="form-check-label" for="globalExpressShipping">Global Express Shipping $19.99</label>
             </div>
           </div>
@@ -93,17 +93,19 @@
         <h3>Payment Options</h3>
 
         <!-- Payment Options Radio Buttons -->
-        <div class="form-check">
+        <div class="row">
+        <div class="form-check col-4">
           <input class="form-check-input" type="radio" name="paymentOption" id="creditCard" checked>
           <label class="form-check-label" for="creditCard">Credit Card</label>
         </div>
-        <div class="form-check">
+        <div class="form-check col-4">
           <input class="form-check-input" type="radio" name="paymentOption" id="paypal">
           <label class="form-check-label" for="paypal">Paypal</label>
         </div>
-        <div class="form-check">
+        <div class="form-check col-4">
           <input class="form-check-input" type="radio" name="paymentOption" id="eTransfer">
           <label class="form-check-label" for="eTransfer">Etransfer</label>
+        </div>
         </div>
 
         <!-- Card Number and Name on Card Inputs -->
@@ -119,7 +121,7 @@
         </div>
 
         <!-- Expiration Date and CVC Inputs (inline) -->
-        <div class="form-row">
+        <div class="form-row row">
           <div class="form-group col-md-7">
             <label for="expirationDate">Expiration Date MM/YY</label>
             <input type="text" class="form-control" id="expirationDate" placeholder="MM/YY">

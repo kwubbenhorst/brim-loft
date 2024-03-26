@@ -41,7 +41,7 @@ router.get('/', async (req, res) => {
     // Render the 'homepage' view within 'main.handlebars'
     res.render('homepage', {
       body: 'homepage', // 'homepage' is the name of your Handlebars view file
-      // logged_in: req.session.logged_in,
+      logged_in: req.session.logged_in,
     });
   } catch (err) {
     // Handle errors, e.g., log them or send an error response
@@ -64,7 +64,7 @@ router.get('/leagues/:id', async (req, res) => {
     res.render('league', {
       // spread operator to pass all properties of leagueData to the template
       ...league,
-      // logged_in: req.session.logged_in,
+      logged_in: req.session.logged_in,
     });
   }
   catch (err) {
@@ -100,7 +100,7 @@ router.get('/teams/:id', async (req, res) => {
     res.render('team', {
       // spread operator to pass all properties of teamData to the template
       ...team,
-      // logged_in: req.session.logged_in,
+      logged_in: req.session.logged_in,
     });
   }
   catch (err) {
@@ -133,7 +133,7 @@ router.get('/categories/:id', async (req, res) => {
     res.render('category', {
       // spread operator to pass all properties of categoryData to the template
       ...category,
-      //logged_in: req.session.logged_in,
+      logged_in: req.session.logged_in,
     });
   }
   catch (err) {

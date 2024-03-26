@@ -133,6 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // Helper function to update totals
 async function updateTotal() {
   try {
+    console.log('Order items:', orderItems);
     // Recalculate subtotal, taxes, and total
     subtotal = orderItems.reduce((total, item) => total + item.orderItem.price_at_purchase, 0);
     taxes = (subtotal + shippingCost) * 0.15;
@@ -163,12 +164,19 @@ async function updateTotal() {
       } else {
         // Update the quantity for the order item
         console.log('orderItems:', orderItems);
-        const updatedItem = orderItems.find((item) => item.orderItem.id === orderItemId);
+        const updatedItem = orderItems.find((item) => item.orderItem.id == orderItemId);
         console.log('orderItemId:', orderItemId);
         console.log('updatedItem:', updatedItem);
         if (updatedItem) {
-        updatedItem.quantity = selectedQuantity;
-        updatedOrderItems.push(updatedItem);
+        updatedItem.orderItem.quantity = selectedQuantity;
+        // updatedOrderItems.push(updatedItem);
+        orderItems=orderItems.map(item=>{
+          if(item.orderItem.id === updatedItem.orderItem.id){
+            return updatedItem;
+          } else {
+            return item;
+          }
+        })
       }
 
         // Make a PUT request to update the order item quantity on the server
@@ -187,8 +195,10 @@ async function updateTotal() {
     }
 
     // Update orderItems array with the modified quantities
-    orderItems.length = 0;
-    Array.prototype.push.apply(orderItems, updatedOrderItems);
+    // orderItems.length = 0;
+    // Array.prototype.push.apply(orderItems, updatedOrderItems);
+    console.log('Order items:', orderItems);
+    renderOrderSummary({orderItems});
   } catch (error) {
     console.error('Error updating totals:', error);
   }

@@ -104,10 +104,10 @@ const loginFormHandler = async (event) => {
 
             // Dynamically update the signup-login button text with user's first name
             const userResponse = await response.json();
-            const welcomeButton = document.getElementById('signup-login-btn');
-            if (welcomeButton) {
-                welcomeButton.textContent = `Welcome ${userResponse.user.first_name}`;
-            }
+            const welcomeButton = document.getElementById('profile-button');
+            // if (welcomeButton) {
+            //     welcomeButton.textContent = `Welcome ${userResponse.user.first_name}`;
+            // }
         } else {
             // Handle error response
             const data = await response.json();
