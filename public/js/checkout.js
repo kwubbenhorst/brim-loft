@@ -73,7 +73,7 @@ function renderOrderSummary(orderData) {
         <h5 class="mb-1">${orderItem.product.name}</h5>
         <p class="mb-1">Price: $${orderItem.orderItem.price_at_purchase.toFixed(2)}</p>
         <select class="custom-select quantity-dropdown" data-orderitemid="${orderItem.orderItem.id}">
-          ${generateQuantityOptions(orderItem.quantity)}
+          ${generateQuantityOptions(orderItem.orderItem.quantity)}
         </select>
       </div>`;
 
@@ -101,10 +101,11 @@ function renderOrderSummary(orderData) {
 
 // Helper function to generate quantity options for the dropdown
 function generateQuantityOptions(selectedQuantity) {
+  console.log('selected quantity:', selectedQuantity);
   let options = '';
-
-  for (let i = 1; i <= 9; i++) {
-    options += `<option value="${i}" ${selectedQuantity === i ? 'selected' : ''}>${i}</option>`;
+    // options += `<option value="${0}" "${selectedQuantity == 0 ? 'selected' : ''}">${0}</option>`;
+  for (let i = 0; i <= 9; i++) {
+    options += `<option value="${i}" ${selectedQuantity == i ? "selected" : null}>${i}</option>`;
   }
 
   return options;
@@ -131,25 +132,22 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Helper function to update totals
-async function updateTotal() {
+async function updateTotal(target) {
   try {
     console.log('Order items:', orderItems);
     // Recalculate subtotal, taxes, and total
-    subtotal = orderItems.reduce((total, item) => total + item.orderItem.price_at_purchase, 0);
-    taxes = (subtotal + shippingCost) * 0.15;
-    orderTotal = subtotal + shippingCost + taxes;
-
-    // Render the updated totals
-    renderOrderTotalElements(subtotal, shippingCost, taxes, orderTotal);
-
+    const selectedQuantity = target.options[target.selectedIndex].value
+    const orderItemId = target.dataset.orderitemid;
+    console.log('selected quantity', selectedQuantity);
+    console.log('orderitemid', orderItemId);
     // Update quantities and handle deletions
-    const quantityDropdowns = document.querySelectorAll('.quantity-dropdown');
-    const updatedOrderItems = [];
-    console.log('Updated Order Items:', updatedOrderItems);
+    // const quantityDropdowns = document.querySelectorAll('.quantity-dropdown');
+    // const updatedOrderItems = [];
+    // console.log('Updated Order Items:', updatedOrderItems);
 
-    for (const dropdown of quantityDropdowns) {
-      const orderItemId = dropdown.getAttribute('data-orderitemid');
-      const selectedQuantity = parseInt(dropdown.value);
+    // for (const dropdown of quantityDropdowns) {
+    //   const orderItemId = dropdown.getAttribute('data-orderitemid');
+    //   const selectedQuantity = parseInt(dropdown.value);
 
       // Handle deletion if quantity is zero
       if (selectedQuantity === 0) {
@@ -169,6 +167,17 @@ async function updateTotal() {
         console.log('updatedItem:', updatedItem);
         if (updatedItem) {
         updatedItem.orderItem.quantity = selectedQuantity;
+        let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+        // const cart = [];
+        cart=cart.map(item => {
+          if(item.product_id == updatedItem.product.id){
+            return {product_id: updatedItem.product.id, quantity: parseInt(selectedQuantity)} 
+          } else {
+            return item;
+          }
+        })
+        // cart.push({product_id: updatedItem.product.id, quantity: selectedQuantity});
+        sessionStorage.setItem("cart", JSON.stringify(cart));
         // updatedOrderItems.push(updatedItem);
         orderItems=orderItems.map(item=>{
           if(item.orderItem.id === updatedItem.orderItem.id){
@@ -177,28 +186,39 @@ async function updateTotal() {
             return item;
           }
         })
-      }
-
         // Make a PUT request to update the order item quantity on the server
         try {
-          await fetch(`/api/order-items/${orderItemId}`, {
+          const result = await fetch(`/api/order-items/${orderItemId}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({ quantity: selectedQuantity }),
           });
+          const response = await result.json()
+          console.log('response:', response);
+        
+        subtotal = orderItems.reduce((total, item) => total + item.orderItem.price_at_purchase, 0); //CHECK FOR PROBLEM HERE!!
+        taxes = (subtotal + shippingCost) * 0.15;
+        orderTotal = subtotal + shippingCost + taxes;
+      
+          // Render the updated totals
+          renderOrderTotalElements(subtotal, shippingCost, taxes, orderTotal);
+          console.log('Order items:', orderItems);
+          renderOrderSummary({orderItems});
         } catch (error) {
           console.error('Error updating order item:', error);
         }
       }
-    }
+
+        
+      }
+    // }
 
     // Update orderItems array with the modified quantities
     // orderItems.length = 0;
     // Array.prototype.push.apply(orderItems, updatedOrderItems);
-    console.log('Order items:', orderItems);
-    renderOrderSummary({orderItems});
+    
   } catch (error) {
     console.error('Error updating totals:', error);
   }
